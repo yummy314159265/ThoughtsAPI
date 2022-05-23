@@ -1,13 +1,13 @@
 import mg from 'mongoose';
 import { formatDate } from '../utils/helpers.js';
 
-const { Schema, model } = mg;
+const { Schema, Types } = mg;
 
 const reactionSchema = new Schema(
     {
         reactionId: {
             type: Schema.Types.ObjectId,
-            default: () => new Types.ObjectId(),
+            default: Types.ObjectId,
         },
         reactionBody: {
             type: String,
@@ -20,7 +20,7 @@ const reactionSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now,
+            default: Date.now(),
             get: formatDate,
         },
     },

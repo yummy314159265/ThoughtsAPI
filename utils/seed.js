@@ -61,6 +61,7 @@ connection.once('open', async () => {
         reactionObjs.push({
             reactionBody: reactions[i],
             username: randomArrEl(usernames),
+            createdAt: Date.now() - Math.floor(Math.random() * 86400000),
         })
     }
 
@@ -69,6 +70,7 @@ connection.once('open', async () => {
             thoughtText: thoughts[i],
             username: randomArrEl(usernames),
             reactions: getReactions(reactionObjs),
+            createdAt: Date.now() - Math.floor(Math.random() * 86400000),
         })
     }
 
@@ -92,9 +94,7 @@ connection.once('open', async () => {
             friends.push(friend._id);
         }
 
-        const user = await User
-            .findOne({username: userObjs[i].username})
-            .populate('thoughts');
+        const user = await User.findOne({username: userObjs[i].username});
 
         user.friends = friends;
 
