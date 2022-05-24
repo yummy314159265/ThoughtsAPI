@@ -1,5 +1,6 @@
 import { connection } from '../config/connection.js';
 import { Thought, User } from '../models/index.js';
+import mg from 'mongoose';
 import { 
     generateEmail, 
     generateUsername, 
@@ -7,6 +8,8 @@ import {
     reactions,
     randomArrEl
 } from './data.js';
+
+const { ObjectId } = mg.Types;
 
 connection.on('error', (err) => err);
 
@@ -35,7 +38,7 @@ connection.once('open', async () => {
     const getThoughts = (user) => thoughtObjs
         .map(thought => {
             if(thought.username === user) {
-                return thought._id;
+                return ObjectId(thought._id);
             }
         })
         .filter(notNull => notNull);
@@ -61,7 +64,7 @@ connection.once('open', async () => {
         reactionObjs.push({
             reactionBody: reactions[i],
             username: randomArrEl(usernames),
-            createdAt: Date.now() - Math.floor(Math.random() * 86400000),
+            createdAt: new Date(Date.now() - Math.floor(Math.random() * 86400000)),
         })
     }
 
@@ -70,7 +73,7 @@ connection.once('open', async () => {
             thoughtText: thoughts[i],
             username: randomArrEl(usernames),
             reactions: getReactions(reactionObjs),
-            createdAt: Date.now() - Math.floor(Math.random() * 86400000),
+            createdAt: new Date(Date.now() - Math.floor(Math.random() * 86400000)),
         })
     }
 
@@ -87,14 +90,13 @@ connection.once('open', async () => {
     await User.collection.insertMany(userObjs);
 
     for (let i = 0; i < userObjs.length; i++) {
+        const user = await User.findOne({username: userObjs[i].username});
         const friends = [];
 
         for (let j = 0; j < Math.floor(Math.random() * 5); j++) {
             const friend = randomArrEl(await User.find({}));
-            friends.push(friend._id);
+            friends.push(ObjectId(friend._id));
         }
-
-        const user = await User.findOne({username: userObjs[i].username});
 
         user.friends = friends;
 
