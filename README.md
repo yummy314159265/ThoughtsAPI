@@ -5,6 +5,9 @@
   ## Description
   
   A social media API where you can post your thoughts, add friends, and react to thoughts
+
+  [Video Demo 1](https://watch.screencastify.com/v/TeblXnVwIedOgEztChXu)
+  [Video Demo 2](https://watch.screencastify.com/v/xM9qFJypy9sfTJSTvQ6I)
   
   ## Table of Contents
   
